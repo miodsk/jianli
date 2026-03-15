@@ -1,0 +1,122 @@
+{
+  "personal": {
+    "name": "孙燚峰",
+    "title": "前端/全栈开发",
+    "email": "1131156534@qq.com",
+    "phone": "15539819367",
+    "wechat": "15539819367",
+    "location": "河南省焦作市",
+    "website": "jianli.langbaima.top",
+    "birthDate": "2003/11",
+    "status": "在校",
+    "availability": "一周内到岗"
+  },
+  "education": [
+    {
+      "school": "河南理工大学",
+      "degree": "本科",
+      "major": "数据科学与大数据技术",
+      "gpa": 3.26,
+      "rank": "前 30%",
+      "startDate": "2022/09",
+      "endDate": "2026/06"
+    }
+  ],
+  "skills": [
+    {
+      "category": "Frontend",
+      "items": [
+        { "name": "Vue", "proficiency": "熟悉" },
+        { "name": "React", "proficiency": "了解" },
+        { "name": "Next", "proficiency": "了解" }
+      ]
+    },
+    {
+      "category": "Backend",
+      "items": [
+        { "name": "Nestjs", "proficiency": "熟悉" },
+        { "name": "FastApi", "proficiency": "了解" }
+      ]
+    },
+    {
+      "category": "Language",
+      "items": [
+        { "name": "TypeScript", "proficiency": "熟悉" },
+        { "name": "Python", "proficiency": "熟悉" }
+      ]
+    },
+    {
+      "category": "Database",
+      "items": [
+        { "name": "Postgres", "proficiency": "了解" },
+        { "name": "Redis", "proficiency": "了解" },
+        { "name": "Milvus", "proficiency": "了解" },
+        { "name": "RabbitMQ", "proficiency": "了解" },
+        { "name": "MinIO", "proficiency": "了解" }
+      ]
+    },
+    {
+      "category": "LLM",
+      "items": [
+        { "name": "langchain", "proficiency": "了解" }
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "company": "河南省爱普尔信息科技有限公司",
+      "position": "前端开发",
+      "startDate": "2025/07",
+      "endDate": "2025/12",
+      "description": [
+        "负责公司OA的前端开发，包括多个模块：如日报，客户，会议，财务，请假等",
+        "将多个CRUD模块抽离为组件",
+        "根据RBAC实现从路由到按钮级的权限控制"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "title": "英语学习平台",
+      "description": "AI 驱动的英语学习平台，支持日常对话、IELTS 作文批改、口语练习和单词记忆",
+      "techStack": ["Vue 3", "Vite", "Element Plus", "Tailwind CSS 4", "Pinia", "NestJS", "Prisma", "PostgreSQL", "WebSocket", "BullMQ", "FastAPI", "LangGraph", "Milvus", "Redis", "MinIO", "支付宝支付"],
+      "github": "https://github.com/miodsk/english",
+      "demo": ""
+    },
+    {
+      "title": "仿QQ的聊天室项目",
+      "description": "一个仿 QQ 的即时通讯项目，使用 Vue3 + Pinia + Element Plus 做前端，NestJS + TypeORM + PostgreSQL 做后端，完成了登录鉴权、好友关系、单聊/群聊、消息实时收发和历史消息查询等功能；后端同时提供 REST 和 WebSocket 接口，结合 Redis 与 RxJS 处理消息分发并落库，前端封装了请求拦截和状态管理来保证会话与登录态的稳定。",
+      "techStack": ["Vue 3", "Pinia", "Element Plus", "NestJS", "TypeORM", "PostgreSQL", "WebSocket", "Redis", "RxJS"],
+      "github": "https://github.com/miodsk/qqFronted",
+      "demo": "chat.langbaima.top"
+    },
+    {
+      "title": "浪白马博客",
+      "description": "基于 Next.js 16 + Supabase 的全栈博客系统，支持用户注册登录、文章发布与编辑、分类浏览、评论、点赞、收藏、通知、个人资料管理等功能；使用 @supabase/ssr 实现 Cookie-based 认证，Middleware 自动刷新 Session；前端采用 Tailwind CSS v4 + shadcn 组件库构建暗色主题 UI，部署于 Vercel。",
+      "techStack": ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "Supabase", "Radix UI", "shadcn/ui", "Vercel"],
+      "github": "https://github.com/miodsk/-blog",
+      "demo": "https://blog-fuqmkiawt-1131156534-4716s-projects.vercel.app/"
+    },
+    {
+      "title": "电商平台（纯前端，pc页面+手机页面）",
+      "description": "一个基于 Vue 3 + VantUi + Element Plus + Pinia 构建的电商平台，包含 PC 端和移动端两个页面，实现了商品展示、购物车、订单、用户登录注册、支付等功能。",
+      "techStack": ["Vue 3","VantUi", "Element Plus", "Pinia"],
+      "github": "https://gitee.com/a1131156534/pc-little-rabbit-fresh",
+      "demo": ["www.langbaima.top","shop.langbaima.top"]
+    },
+    {
+      "title": "threejsDemo",
+      "description": "包括后台管理与前台可视化。可视化方面使用了threejs与echarts，可以控制人物移动来参观园区,。",
+      "techStack": ["Vue 3", "Threejs","Echarts"],
+      "github": "https://github.com/miodsk/english",
+      "demo": ["smartpark.langbaima.top","smartpark.langbaima.top#/visualization"]
+    },
+    {
+      "title": "OpenlayerDemo",
+      "description": "一个简易的map展示，使用openlayer实现。",
+      "techStack": ["Vue 3", "Openlayer"],
+      "github": "https://gitee.com/a1131156534/ol-practice",
+      "demo": "map.langbaima.top"
+    }
+  ]
+}
