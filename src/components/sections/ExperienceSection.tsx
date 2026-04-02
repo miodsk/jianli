@@ -1,32 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Building2, Calendar, CheckCircle2 } from "lucide-react";
+import { motion } from "motion/react";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { cardHover, cardStagger, cardTap, sideReveal } from "@/lib/animations";
 import resumeData from "@/data/resume.json";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0, 0, 0.2, 1] as const,
-    },
-  },
-};
 
 export function ExperienceSection() {
   const { experience } = resumeData;
@@ -34,29 +14,26 @@ export function ExperienceSection() {
   return (
     <section id="experience" className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">工作经历</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            我的专业工作经验和成就
-          </p>
-        </motion.div>
+        <SectionHeader
+          title="工作经历"
+          description="我的专业工作经验和成就"
+        />
 
         <motion.div
-          variants={containerVariants}
+          variants={cardStagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.18 }}
           className="space-y-4"
         >
           {experience.map((exp, index) => (
-            <motion.div key={index} variants={itemVariants}>
-              <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <motion.div
+              key={index}
+              variants={sideReveal}
+              whileHover={cardHover}
+              whileTap={cardTap}
+            >
+              <Card className="overflow-hidden border-border/70 bg-card/95 shadow-sm transition-colors hover:border-primary/15 hover:shadow-xl">
                 <CardHeader className="pb-2">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                     <CardTitle className="flex items-center gap-2 text-xl">

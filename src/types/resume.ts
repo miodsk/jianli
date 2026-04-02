@@ -22,7 +22,7 @@ export interface Education {
 
 export interface SkillItem {
   name: string;
-  proficiency: string;
+  proficiency?: string;
 }
 
 export interface SkillCategory {

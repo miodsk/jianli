@@ -1,33 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ExternalLink, Folder, Github } from "lucide-react";
+import { motion } from "motion/react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Github, ExternalLink, Folder } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import {
+  badgeReveal,
+  badgeStagger,
+  buttonTap,
+  cardHover,
+  cardReveal,
+  cardStagger,
+  cardTap,
+  sectionReveal,
+  sectionStagger,
+} from "@/lib/animations";
 import resumeData from "@/data/resume.json";
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0, 0, 0.2, 1] as const,
-    },
-  },
-};
 
 const ensureHttp = (url: string) => {
   if (!url) return "";
@@ -57,75 +46,96 @@ export function ProjectsSection() {
   return (
     <section id="projects" className="py-12 px-4 bg-muted/30">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">项目经历</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            我参与开发的主要项目和作品
-          </p>
-        </motion.div>
+        <SectionHeader
+          title="项目经历"
+          description="我参与开发的主要项目和作品"
+        />
 
         <motion.div
-          variants={containerVariants}
+          variants={cardStagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.16 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           {validProjects.map((project, index) => (
-            <motion.div key={index} variants={itemVariants}>
-              <Card className="h-full flex flex-col hover:shadow-lg transition-shadow group">
-                <CardHeader className="pb-2">
-                  <Folder className="w-8 h-8 text-primary/70 group-hover:text-primary transition-colors" />
-                  <CardTitle className="text-lg mt-2">{project.title}</CardTitle>
-                  <CardDescription className="text-sm leading-relaxed line-clamp-3">
-                    {project.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex-1 flex flex-col justify-end">
-                  <div className="flex flex-wrap gap-2 mb-3">
-                    {project.techStack?.map((tech) => (
-                      <Badge key={tech} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex flex-wrap gap-3 text-sm">
-                    {project.github && (
-                      <a
-                        href={ensureHttp(project.github)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        <Github className="w-4 h-4" />
-                        <span>GitHub</span>
-                      </a>
-                    )}
-                    {project.demo && (() => {
-                      const demoUrls = parseDemoList(project.demo as string);
-                      return demoUrls.map((url, idx) => (
-                        <a
-                          key={idx}
-                          href={ensureHttp(url)}
+            <motion.article
+              key={index}
+              variants={cardReveal}
+              whileHover={cardHover}
+              whileTap={cardTap}
+              className="h-full"
+            >
+              <Card className="group relative flex h-full flex-col overflow-hidden border-border/70 bg-card/95 shadow-sm transition-colors hover:border-primary/20 hover:shadow-2xl">
+                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <motion.div variants={sectionStagger} className="flex h-full flex-col">
+                  <CardHeader className="pb-2">
+                    <motion.div variants={badgeReveal}>
+                      <Folder className="h-8 w-8 text-primary/70 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-primary" />
+                    </motion.div>
+                    <motion.div variants={sectionReveal}>
+                      <CardTitle className="mt-2 text-lg">{project.title}</CardTitle>
+                    </motion.div>
+                    <motion.div variants={sectionReveal}>
+                      <CardDescription className="line-clamp-3 text-sm leading-relaxed">
+                        {project.description}
+                      </CardDescription>
+                    </motion.div>
+                  </CardHeader>
+                  <CardContent className="flex flex-1 flex-col justify-end gap-4">
+                    <motion.div
+                      variants={badgeStagger}
+                      className="flex flex-wrap gap-2"
+                    >
+                      {project.techStack?.map((tech) => (
+                        <motion.span
+                          key={tech}
+                          variants={badgeReveal}
+                          className="inline-flex"
+                        >
+                          <Badge variant="secondary" className="text-xs shadow-sm">
+                            {tech}
+                          </Badge>
+                        </motion.span>
+                      ))}
+                    </motion.div>
+                    <motion.div variants={badgeStagger} className="flex flex-wrap gap-3 text-sm">
+                      {project.github ? (
+                        <motion.a
+                          variants={badgeReveal}
+                          href={ensureHttp(project.github)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
+                          className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
+                          whileHover={{ x: 2 }}
+                          whileTap={buttonTap}
                         >
-                          <ExternalLink className="w-4 h-4" />
-                          <span>Demo{demoUrls.length > 1 ? ` ${idx + 1}` : ""}</span>
-                        </a>
-                      ));
-                    })()}
-                  </div>
-                </CardContent>
+                          <Github className="h-4 w-4" />
+                          <span>GitHub</span>
+                        </motion.a>
+                      ) : null}
+                      {project.demo
+                        ? parseDemoList(project.demo).map((url, idx, demoUrls) => (
+                            <motion.a
+                              key={`${url}-${idx}`}
+                              variants={badgeReveal}
+                              href={ensureHttp(url)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-muted-foreground transition-colors hover:text-foreground"
+                              whileHover={{ x: 2 }}
+                              whileTap={buttonTap}
+                            >
+                              <ExternalLink className="h-4 w-4" />
+                              <span>Demo{demoUrls.length > 1 ? ` ${idx + 1}` : ""}</span>
+                            </motion.a>
+                          ))
+                        : null}
+                    </motion.div>
+                  </CardContent>
+                </motion.div>
               </Card>
-            </motion.div>
+            </motion.article>
           ))}
         </motion.div>
       </div>

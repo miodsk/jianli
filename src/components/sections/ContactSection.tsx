@@ -1,23 +1,24 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
+import { Github, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Mail, Phone, MessageCircle, MapPin, Github } from "lucide-react";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import {
+  badgeReveal,
+  badgeStagger,
+  buttonHover,
+  buttonTap,
+  cardHover,
+  cardTap,
+  defaultTransition,
+  sectionCopyReveal,
+  sectionReveal,
+  sectionStagger,
+} from "@/lib/animations";
 import resumeData from "@/data/resume.json";
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0, 0, 0.2, 1] as const,
-    },
-  },
-};
 
 export function ContactSection() {
   const { personal } = resumeData;
@@ -52,44 +53,35 @@ export function ContactSection() {
   return (
     <section id="contact" className="py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-2xl md:text-3xl font-bold mb-2">联系方式</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            欢迎与我联系，期待与您合作
-          </p>
-        </motion.div>
+        <SectionHeader
+          title="联系方式"
+          description="欢迎与我联系，期待与您合作"
+        />
 
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
-          variants={{
-            visible: {
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
+          viewport={{ once: true, amount: 0.2 }}
+          variants={sectionStagger}
         >
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden border-border/70 bg-card/95 shadow-sm">
             <CardContent className="p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {contactMethods.map((method, index) => {
+              <motion.div
+                variants={badgeStagger}
+                className="grid grid-cols-1 gap-6 md:grid-cols-2"
+              >
+                {contactMethods.map((method) => {
                   const Icon = method.icon;
                   return (
                     <motion.div
                       key={method.label}
-                      variants={itemVariants}
-                      className="flex items-center gap-4 p-4 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
+                      variants={badgeReveal}
+                      whileHover={cardHover}
+                      whileTap={cardTap}
+                      className="flex items-center gap-4 rounded-2xl border border-transparent bg-muted/50 p-4 transition-colors hover:border-primary/10 hover:bg-muted"
                     >
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-primary" />
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                        <Icon className="h-5 w-5 text-primary" />
                       </div>
                       <div className="min-w-0">
                         <p className="text-sm text-muted-foreground">
@@ -109,35 +101,42 @@ export function ContactSection() {
                     </motion.div>
                   );
                 })}
-              </div>
+              </motion.div>
 
               <Separator className="my-8" />
 
               <motion.div
-                variants={itemVariants}
-                className="text-center space-y-4"
+                variants={sectionReveal}
+                className="space-y-4 text-center"
               >
-                <p className="text-muted-foreground">
+                <motion.p variants={sectionCopyReveal} className="text-muted-foreground">
                   您也可以通过以下方式找到我
-                </p>
-                <div className="flex justify-center gap-4">
-                  <Button variant="outline" size="lg" asChild>
-                    <a
-                      href="https://github.com/miodsk"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Github className="w-5 h-5 mr-2" />
-                      GitHub
-                    </a>
-                  </Button>
-                  <Button size="lg" asChild>
-                    <a href={`mailto:${personal.email}`}>
-                      <Mail className="w-5 h-5 mr-2" />
-                      发送邮件
-                    </a>
-                  </Button>
-                </div>
+                </motion.p>
+                <motion.div
+                  variants={badgeStagger}
+                  className="flex justify-center gap-4"
+                >
+                  <motion.div variants={badgeReveal} whileHover={buttonHover} whileTap={buttonTap}>
+                    <Button variant="outline" size="lg" asChild>
+                      <a
+                        href="https://github.com/miodsk"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Github className="mr-2 h-5 w-5" />
+                        GitHub
+                      </a>
+                    </Button>
+                  </motion.div>
+                  <motion.div variants={badgeReveal} whileHover={buttonHover} whileTap={buttonTap}>
+                    <Button size="lg" asChild className="shadow-lg shadow-primary/15">
+                      <a href={`mailto:${personal.email}`}>
+                        <Mail className="mr-2 h-5 w-5" />
+                        发送邮件
+                      </a>
+                    </Button>
+                  </motion.div>
+                </motion.div>
               </motion.div>
             </CardContent>
           </Card>
@@ -145,10 +144,11 @@ export function ContactSection() {
 
         {/* Footer */}
         <motion.footer
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
+          variants={sectionCopyReveal}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ ...defaultTransition, delay: 0.16 }}
           className="mt-16 text-center text-sm text-muted-foreground"
         >
           <p>

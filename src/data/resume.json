@@ -5,7 +5,7 @@
     "email": "1131156534@qq.com",
     "phone": "15539819367",
     "wechat": "15539819367",
-    "location": "河南省焦作市",
+    "location": "河南省三门峡市",
     "website": "jianli.langbaima.top",
     "birthDate": "2003/11",
     "status": "在校",
@@ -24,41 +24,44 @@
   ],
   "skills": [
     {
-      "category": "Frontend",
+      "category": "开发语言",
       "items": [
-        { "name": "Vue", "proficiency": "熟悉" },
-        { "name": "React", "proficiency": "了解" },
-        { "name": "Next", "proficiency": "了解" }
+        { "name": "TypeScript" },
+        { "name": "Python" }
       ]
     },
     {
-      "category": "Backend",
+      "category": "Web框架",
       "items": [
-        { "name": "Nestjs", "proficiency": "熟悉" },
-        { "name": "FastApi", "proficiency": "了解" }
+        { "name": "Vue" },
+        { "name": "React" },
+        { "name": "Next.js" },
+        { "name": "NestJS" },
+        { "name": "FastAPI" }
       ]
     },
     {
-      "category": "Language",
+      "category": "LLM框架",
       "items": [
-        { "name": "TypeScript", "proficiency": "熟悉" },
-        { "name": "Python", "proficiency": "熟悉" }
+        { "name": "LangChain" },
+        { "name": "Vercel AI SDK" },
+        { "name": "Agent 工作流" }
       ]
     },
     {
-      "category": "Database",
+      "category": "中间件",
       "items": [
-        { "name": "Postgres", "proficiency": "了解" },
-        { "name": "Redis", "proficiency": "了解" },
-        { "name": "Milvus", "proficiency": "了解" },
-        { "name": "RabbitMQ", "proficiency": "了解" },
-        { "name": "MinIO", "proficiency": "了解" }
+        { "name": "PostgreSQL" },
+        { "name": "Redis" },
+        { "name": "Milvus" },
+        { "name": "RabbitMQ" },
+        { "name": "MinIO" }
       ]
     },
     {
-      "category": "LLM",
+      "category": "AI编程工具",
       "items": [
-        { "name": "langchain", "proficiency": "了解" }
+        { "name": "OpenCode" }
       ]
     }
   ],
@@ -69,13 +72,20 @@
       "startDate": "2025/07",
       "endDate": "2025/12",
       "description": [
-        "负责公司OA的前端开发，包括多个模块：如日报，客户，会议，财务，请假等",
-        "将多个CRUD模块抽离为组件",
-        "根据RBAC实现从路由到按钮级的权限控制"
+        "针对系统中存在的大量重复业务逻辑，通过对 CRUD 核心业务组件的二次封装。通过属性透传与配置化策略，实现了业务页面的高度复用",
+        "基于 RBAC 模型 构建了全链路权限控制体系。利用路由守卫与后端接口联动实现权限动态注入，并封装权限验证组件/指令，达成 按钮级的细粒度访问控制",
+        "独立负责财务、会议等核心业务线的研发，针对复杂审批流程设计了灵活的状态机"
       ]
     }
   ],
   "projects": [
+    {
+      "title": "miniClaudeCode",
+      "description": "基于 LLM 与多智能体协作的编程辅助工具，能够理解用户需求、分解任务、调度专项智能体（调研/编码）、管理任务状态，并在隔离的 Git Worktree 中执行操作，最终由主智能体整合结果交付。",
+      "techStack": ["Python 3.14+", "LangChain", "LangGraph", "DeepSeek", "Git Worktree"],
+      "github": "https://github.com/miodsk/miniClaudeCode",
+      "demo": ""
+    },
     {
       "title": "英语学习平台",
       "description": "AI 驱动的英语学习平台，支持日常对话、IELTS 作文批改、口语练习和单词记忆",
@@ -106,7 +116,7 @@
     },
     {
       "title": "threejsDemo",
-      "description": "包括后台管理与前台可视化。可视化方面使用了threejs与echarts，可以控制人物移动来参观园区,。",
+      "description": "包括后台管理与前台可视化。可视化方面使用了threejs与echarts，可以控制人物移动来参观园区。",
       "techStack": ["Vue 3", "Threejs","Echarts"],
       "github": "https://github.com/miodsk/english",
       "demo": ["smartpark.langbaima.top","smartpark.langbaima.top#/visualization"]

@@ -1,10 +1,24 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import {
+  AnimatePresence,
+  LayoutGroup,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from "motion/react";
 import { Menu, X } from "lucide-react";
-import { ThemeToggle } from "./ThemeToggle";
+import {
+  buttonHover,
+  buttonTap,
+  defaultTransition,
+  emphasizedEase,
+  navIndicatorTransition,
+} from "@/lib/animations";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { id: "hero", label: "首页" },
@@ -19,14 +33,21 @@ export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const shouldReduceMotion = useReducedMotion() ?? false;
+  const mobileMenuId = "mobile-navigation-menu";
+  const { scrollYProgress } = useScroll();
+  const progressScaleX = useSpring(scrollYProgress, {
+    stiffness: shouldReduceMotion ? 120 : 200,
+    damping: shouldReduceMotion ? 28 : 32,
+    mass: 0.22,
+  });
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 24);
 
-      // 检测当前活动的 section
       const sections = navItems.map((item) => document.getElementById(item.id));
-      const scrollPosition = window.scrollY + 100;
+      const scrollPosition = window.scrollY + 160;
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const section = sections[i];
@@ -37,6 +58,7 @@ export function Navigation() {
       }
     };
 
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -44,7 +66,9 @@ export function Navigation() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({
+        behavior: shouldReduceMotion ? "auto" : "smooth",
+      });
     }
     setIsMobileMenuOpen(false);
   };
@@ -53,98 +77,141 @@ export function Navigation() {
     <>
       {/* Desktop Navigation */}
       <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
+        initial={{ y: -48, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.55, ease: emphasizedEase }}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
           isScrolled
-            ? "bg-background/80 backdrop-blur-md border-b shadow-sm"
+            ? "border-b border-border/70 bg-background/88 shadow-sm backdrop-blur-xl"
             : "bg-transparent"
         )}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="absolute inset-x-0 top-0 h-px overflow-hidden">
+          <motion.span
+            className="block h-full origin-left bg-gradient-to-r from-primary/20 via-primary/80 to-primary/20"
+            style={{ scaleX: progressScaleX }}
+          />
+        </div>
+
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between gap-3">
             {/* Logo */}
             <motion.button
               onClick={() => scrollToSection("hero")}
-              className="font-bold text-xl text-foreground"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              className="text-xl font-bold text-foreground"
+              whileHover={buttonHover}
+              whileTap={buttonTap}
             >
               孙燚峰
             </motion.button>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-1">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={cn(
-                    "px-4 py-2 rounded-md text-sm font-medium transition-colors",
-                    activeSection === item.id
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                  )}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {item.label}
-                </motion.button>
-              ))}
-              <div className="ml-4 pl-4 border-l">
-                <ThemeToggle />
+            <LayoutGroup id="navigation-desktop-menu">
+              <div className="hidden items-center gap-2 md:flex">
+                <div className="flex items-center gap-1 rounded-full border border-border/70 bg-background/75 p-1 shadow-sm backdrop-blur-xl">
+                  {navItems.map((item) => {
+                    const isActive = activeSection === item.id;
+
+                    return (
+                      <motion.button
+                        key={item.id}
+                        onClick={() => scrollToSection(item.id)}
+                        aria-current={isActive ? "page" : undefined}
+                        className={cn(
+                          "relative overflow-hidden rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                          isActive
+                            ? "text-primary"
+                            : "text-muted-foreground hover:text-foreground"
+                        )}
+                        whileHover={buttonHover}
+                        whileTap={buttonTap}
+                      >
+                        {isActive ? (
+                          <motion.span
+                            layoutId="navigation-active-pill"
+                            className="absolute inset-0 rounded-full border border-primary/10 bg-primary/10"
+                            transition={navIndicatorTransition}
+                          />
+                        ) : null}
+                        <span className="relative z-10">{item.label}</span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+                <div className="border-l border-border/70 pl-3">
+                  <ThemeToggle />
+                </div>
               </div>
-            </div>
+            </LayoutGroup>
 
             {/* Mobile Menu Button */}
-            <div className="flex md:hidden items-center space-x-2">
+            <div className="flex items-center space-x-2 md:hidden">
               <ThemeToggle />
-              <button
+              <motion.button
+                type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-md hover:bg-accent transition-colors"
+                className="rounded-full border border-border/70 bg-background/80 p-2 text-foreground shadow-sm backdrop-blur transition-colors hover:bg-accent"
                 aria-label="Toggle menu"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls={mobileMenuId}
+                whileTap={buttonTap}
+                whileHover={buttonHover}
               >
-                {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
+                <motion.span
+                  key={isMobileMenuOpen ? "close" : "open"}
+                  initial={shouldReduceMotion ? false : { opacity: 0, rotate: -18, scale: 0.92 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  transition={defaultTransition}
+                  className="flex"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="h-6 w-6" />
+                  ) : (
+                    <Menu className="h-6 w-6" />
+                  )}
+                </motion.span>
+              </motion.button>
             </div>
           </div>
         </div>
       </motion.nav>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
+      <AnimatePresence initial={false}>
+        {isMobileMenuOpen ? (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            id={mobileMenuId}
+            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-16 z-40 md:hidden bg-background/95 backdrop-blur-md border-b shadow-lg"
+            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -12 }}
+            transition={{ duration: 0.22, ease: emphasizedEase }}
+            className="fixed inset-x-0 top-16 z-40 border-b border-border/70 bg-background/95 shadow-lg backdrop-blur-xl md:hidden"
           >
-            <div className="px-4 py-4 space-y-1">
-              {navItems.map((item) => (
-                <motion.button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={cn(
-                    "w-full text-left px-4 py-3 rounded-md text-base font-medium transition-colors",
-                    activeSection === item.id
-                      ? "text-primary bg-primary/10"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent"
-                  )}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {item.label}
-                </motion.button>
-              ))}
+            <div className="space-y-1 px-4 py-4">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+
+                return (
+                  <motion.button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    aria-current={isActive ? "page" : undefined}
+                    className={cn(
+                      "w-full rounded-2xl px-4 py-3 text-left text-base font-medium transition-colors",
+                      isActive
+                        ? "bg-primary/10 text-primary"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    )}
+                    whileTap={buttonTap}
+                  >
+                    {item.label}
+                  </motion.button>
+                );
+              })}
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </>
   );
